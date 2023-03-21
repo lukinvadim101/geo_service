@@ -5,6 +5,10 @@ class LocationsController < ApplicationController
 
   def create
     location = Location.new(location_params)
+
+    return unless location.save
+
+    render json: { location:, message: "location saved " }
   end
 
   private

@@ -9,9 +9,18 @@ RSpec.describe "Locations" do
   end
 
   describe "POST /locations" do
+    let(:valid_params) { attributes_for(:location) }
+
+    before do
+      post "/locations", params: { location: valid_params }
+    end
+
     it "returns http success" do
-      post "/locations", params: { location: { ip: "127.0.0.1" } }
       expect(response).to have_http_status(:success)
+    end
+
+    it "saves location" do
+      expect(response.body).to include('saved')
     end
   end
 end
