@@ -15,12 +15,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_12_212605) do
   enable_extension "plpgsql"
 
   create_table "locations", force: :cascade do |t|
-    t.string "ip"
+    t.string "ip", null: false
     t.string "name"
     t.float "latitude"
     t.float "longitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["ip"], name: "index_locations_on_ip", unique: true
   end
 
 end

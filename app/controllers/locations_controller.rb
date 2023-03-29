@@ -4,11 +4,13 @@ class LocationsController < ApplicationController
   end
 
   def create
-    location = Location.new(location_params)
+    @location = Location.new(location_params)
 
-    return unless location.save
-
-    render json: { location:, message: "location saved " }
+    if @location.save
+      render json: { location: @location, message: "location saved" }, status: :ok
+    else
+      render json: { message: @location.errors.full_messages }, status: :bad_request
+    end
   end
 
   private
