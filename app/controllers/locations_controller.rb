@@ -5,6 +5,7 @@ class LocationsController < ApplicationController
 
   def create
     @location = Location.new(location_params)
+    # to do add service Ipstack.new(param).call
 
     if @location.save
       render json: { location: @location, message: "location saved" }, status: :ok
