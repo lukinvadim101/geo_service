@@ -4,11 +4,11 @@ class LocationsController < ApplicationController
   end
 
   def create
-    @location = Location.new(location_params)
-    # to do add service Ipstack.new(param).call
+    location_hash = IpstackService.new(location_params[:ip]).call
+    @location = Location.new(location_hash)
 
     if @location.save
-      render json: { location: @location, message: "location saved" }, status: :ok
+      render json: { location: @location, message: 'location saved' }, status: :ok
     else
       render json: { message: @location.errors.full_messages }, status: :bad_request
     end
