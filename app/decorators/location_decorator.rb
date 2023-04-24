@@ -1,9 +1,9 @@
 class LocationDecorator
   def initialize(location)
-    @location = location
+    @location = location.with_indifferent_access
   end
 
-  def call
+  def handle_response
     {
       ip: @location[:ip],
       name: concat_name,
