@@ -1,30 +1,26 @@
 class LocationsController < ApplicationController
   def index
-    Location.all
+    render json: Location.all.order(created_at: :desc).page(1)
   end
 
   def create
-    if location_params[:ip].blank?
-      render json: { error: 'Required parameter is empty' }, status: :unprocessable_entity
-      return
-    end
-
+    # to make Location.find(location_params[:ip])
     location_service_response = IpstackService.new(location_params[:ip]).call
-
-    render json: { error: 'Required parameter is empty' }, status: :unprocessable_entity if location_service_response["errors"].present?
-
+    binding.pry
     @location = Location.new(location_service_response[:payload])
 
-    if @location.save
-      render json: { location: @location, message: 'location saved' }, status: :ok
+    if location.save
+      render json: { location: }, status: :ok
     else
-      render json: { location: @location, message: 'location NOT saved' }, status: :bad_request
+      render json: { errors: location.errors.full_messages }, status: :bad_request
     end
   end
 
   private
 
+  attr_reader :location
+
   def location_params
-    params.require(:location).permit(:ip)
+    params.permit(:ip)
   end
 end

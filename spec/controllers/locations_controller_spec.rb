@@ -1,6 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe LocationsController do
+  describe 'Get locations' do
+    let!(:location) { create(:location) }
+
+    it 'returns success' do
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'returns location ip' do
+      get(:index, format: :json)
+      first_location = JSON.parse(response.body, symbolize_names: true).first
+      expect(first_location[:ip]).to eq(location.ip)
+    end
+  end
+
   describe 'POST /locations' do
     let(:location_params) { attributes_for(:location) }
     let(:location_hash) do
@@ -11,12 +25,12 @@ RSpec.describe LocationsController do
                    longitude: -122.0574 } }
     end
 
-    before do
-      allow(IpstackService).to receive(:new).and_return(ipstack_service)
-      allow(ipstack_service).to receive(:call).and_return(location_hash)
-    end
-
     context 'with valid params' do
+      before do
+        allow(IpstackService).to receive(:new).and_return(ipstack_service)
+        allow(ipstack_service).to receive(:call).and_return(location_hash)
+      end
+
       let(:ipstack_service) { instance_double(IpstackService) }
 
       it 'creates a new location' do
@@ -29,13 +43,17 @@ RSpec.describe LocationsController do
       end
 
       it 'saves location' do
-        post(:create, params: { location: location_params })
-        expect(response.body).to include('location saved')
+        expect { post(:create, params: { location: { ip: :location_params } }) }.to change(Location, :count)
       end
     end
 
     context 'with invalid params' do
-      let(:ipstack_service) { instance_double(IpstackService, call: nil) }
+      # let(:ipstack_service) { instance_double(IpstackService, call: nil) }
+
+      # before do
+      #   allow(IpstackService).to receive(:new).and_return(ipstack_service)
+      #   allow(ipstack_service).to receive(:call).and_call_original
+      # end
 
       it 'returns http bad request' do
         post(:create, params: nil)
