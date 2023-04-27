@@ -12,7 +12,7 @@ class LocationsController < ApplicationController
       @location = Location.find_or_create_by(location_service_response[:payload])
 
       if @location.save
-        render json: { location: @location }, status: :ok
+        render json: { location: @location, serializer: LocationSerializer }, status: :ok
       else
         render json: { errors: @location.errors.full_messages }, status: :bad_request
       end
