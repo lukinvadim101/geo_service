@@ -1,6 +1,6 @@
 class IpstackService
-  def initialize(user_param)
-    @user_param = user_param
+  def initialize(ip)
+    @ip_param = ip
     @access_key = ENV.fetch('IPSTACK_API_KEY', '')
     @connection ||= Faraday.new('http://api.ipstack.com/') do |conn|
       conn.response :json
@@ -9,15 +9,11 @@ class IpstackService
   end
 
   def call
-    if valid_ip_address?(user_param)
-      @response = @connection.get(user_param, { access_key: @access_key })
-      if @response.success?
-        success_response
-      else
-        error_response
-      end
+    if valid_ip_address?
+      response = @connection.get(ip_param, { access_key: @access_key, output: :json })
+      handle_response(response)
     else
-      { error: 'Invalid IP', status: :unprocessable_entity }
+      { error: 'Invalid IP' }
     end
   rescue Faraday::Error => e
     { error: "Error fetching data: #{e.message}" }
@@ -25,23 +21,20 @@ class IpstackService
 
   private
 
-  attr_reader :user_param
+  attr_reader :ip_param
 
-  def valid_ip_address?(ip_address)
+  def valid_ip_address?
     ipv4_regex = /^(\d{1,3}\.){3}\d{1,3}$/
     ipv6_regex = /^([\da-fA-F]{1,4}:){7}([\da-fA-F]{1,4})$/
-    binding.pry
-    # check if the string matches either IPv4 or IPv6 pattern
-    !!(ip_address =~ ipv4_regex || ip_address =~ ipv6_regex)
+
+    !!(ip_param =~ ipv4_regex || ip_param =~ ipv6_regex)
   end
 
-  def success_response
-    { error: nil,
-      payload: LocationDecorator.new(@response.body).handle_response }
-  end
-
-  def error_response
-    { error: "Error fetching data: #{@response.body}",
-      status: @response.status }
+  def handle_response(response)
+    if response.success?
+      { payload: LocationDecorator.new(response.body).handle_response }
+    else
+      { error: "Error fetching data: #{response.body}", status: response.status }
+    end
   end
 end

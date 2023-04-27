@@ -5,6 +5,7 @@ RSpec.describe LocationsController do
     let!(:location) { create(:location) }
 
     it 'returns success' do
+      get(:index, format: :json)
       expect(response).to have_http_status(:ok)
     end
 
@@ -48,25 +49,25 @@ RSpec.describe LocationsController do
     end
 
     context 'with invalid params' do
-      # let(:ipstack_service) { instance_double(IpstackService, call: nil) }
-
+      # let(:ipstack_service) { instance_double(IpstackService, call: location_hash) }
+      #
       # before do
       #   allow(IpstackService).to receive(:new).and_return(ipstack_service)
-      #   allow(ipstack_service).to receive(:call).and_call_original
       # end
 
       it 'returns http bad request' do
         post(:create, params: nil)
+
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'does not create a new location' do
-        expect { post(:create, params: { location: { ip: '' } }) }.not_to change(Location, :count)
+        expect { post(:create, params: { location: { ip: nil } }) }.not_to change(Location, :count)
       end
 
       it 'returns error messages' do
         post(:create, params: { location: { ip: '' } })
-        expect(response.body["error"]).not_to be_nil
+        expect(JSON.parse(response.body)['error']).to eq("Invalid IP")
       end
     end
   end
