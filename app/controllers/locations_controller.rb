@@ -4,18 +4,12 @@ class LocationsController < ApplicationController
   end
 
   def create
-    location_service_response = IpstackService.new(location_params[:ip]).call
-
-    if location_service_response[:error].present?
-      render json: location_service_response, status: :unprocessable_entity
+    @location = Location.new(location_params)
+    if @location.save
+      LocationServiceJob.perform_later(location.id)
+      render json: { location: @location, message: "Location is created, request is queued" }, status: :created
     else
-      @location = Location.find_or_create_by(location_service_response[:payload])
-
-      if @location.save
-        render json: { location: @location, serializer: LocationSerializer }, status: :ok
-      else
-        render json: { errors: @location.errors.full_messages }, status: :bad_request
-      end
+      render json: { error: @location.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
