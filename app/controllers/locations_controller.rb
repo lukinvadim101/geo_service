@@ -1,4 +1,4 @@
-class LocationsController < ApplicationController
+class LocationsController < ApiController
   before_action :set_location, only: [:show, :destroy]
   def index
     render json: Location.all.order(created_at: :desc).page(1).per(5)
