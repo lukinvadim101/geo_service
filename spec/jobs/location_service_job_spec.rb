@@ -19,21 +19,16 @@ RSpec.describe LocationServiceJob do
     end
 
     describe '#perform' do
-      it 'looks up the location geolocation data using the GeolocationService' do
+      before do
         described_class.perform_now(location.id)
-        expect(geolocation_service).to receive(:call).with(ip_address)
       end
 
-      # allow(IpstackService).to receive(:new).and_return(geolocation_service)
-      # allow(geolocation_service).to receive(:call).and_return(location_hash)
-
-      # it 'looks up the location geolocation data using the GeolocationService' do
-      #   expect(geolocation_service).to receive(:call).with(ip_address)
-      #   described_class.perform_now(location.id)
-      # end
+      it 'looks up the location geolocation data using the GeolocationService' do
+        expect(IpstackService).to have_received(:new).with(location.ip)
+        expect(geolocation_service).to have_received(:call)
+      end
 
       it 'updates the location with the geolocation data' do
-        described_class.perform_now(location.id)
         expect(Location.last.ip).to eq(ip_address)
         expect(Location.last.name).to eq(location_hash[:payload][:name])
       end

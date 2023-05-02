@@ -18,6 +18,7 @@ RSpec.describe IpstackService do
   context 'with invalid params' do
     it 'returns error message' do
       response = described_class.new(nil).call
+      binding.pry
       expect(response[:error]).not_to be_nil
     end
   end
