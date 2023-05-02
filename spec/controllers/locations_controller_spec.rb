@@ -71,4 +71,15 @@ RSpec.describe LocationsController do
       expect(response.parsed_body['location']['id']).to eq(location.id)
     end
   end
+
+  describe 'DELETE Locations/:id' do
+    let!(:location) { create(:location) }
+
+    it "deletes location and returns HTTP status :no_content" do
+      expect do
+        delete :destroy, params: { id: location.id }
+      end.to change(Location, :count).by(-1)
+      expect(response.status).to eq(204)
+    end
+  end
 end

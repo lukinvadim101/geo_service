@@ -1,5 +1,5 @@
 class LocationsController < ApplicationController
-  before_action :set_location, only: [:show]
+  before_action :set_location, only: [:show, :destroy]
   def index
     render json: Location.all.order(created_at: :desc).page(1).per(5)
   end
@@ -19,6 +19,15 @@ class LocationsController < ApplicationController
       render json: { location: @location, message: "Location is created, request is queued" }, status: :created
     else
       render json: { error: @location.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @location.blank?
+      render json: { error: 'Location not found' }, status: :not_found
+    else
+      @location.destroy
+      head :no_content
     end
   end
 
