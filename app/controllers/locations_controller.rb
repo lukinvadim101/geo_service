@@ -1,6 +1,15 @@
 class LocationsController < ApplicationController
+  before_action :set_location, only: [:show]
   def index
     render json: Location.all.order(created_at: :desc).page(1).per(5)
+  end
+
+  def show
+    if @location.blank?
+      render json: { error: @location.errors.full_messages }, status: :not_found
+    else
+      render json: { location: @location }, status: :ok
+    end
   end
 
   def create
@@ -14,6 +23,10 @@ class LocationsController < ApplicationController
   end
 
   private
+
+  def set_location
+    @location = Location.find(params[:id])
+  end
 
   attr_reader :location
 

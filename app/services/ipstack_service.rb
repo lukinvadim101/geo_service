@@ -12,8 +12,7 @@ class IpstackService
     return { error: "Invalid search parameter" } if search_param.blank?
 
     response = @connection.get(search_param, { access_key: @access_key, output: :json })
-    location_hash = LocationDecorator.new(response.body).handle_response
-    { payload: location_hash }
+    { payload: LocationDecorator.new(response.body).handle_response }
   rescue Faraday::Error => e
     { error: "Error fetching data: #{e.message}" }
   end

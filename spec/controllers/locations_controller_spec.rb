@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe LocationsController do
-  describe 'Get locations' do
+  describe 'GET Locations' do
     let!(:location) { create(:location) }
 
     it 'returns success' do
@@ -16,7 +16,7 @@ RSpec.describe LocationsController do
     end
   end
 
-  describe 'POST /locations' do
+  describe 'POST Locations' do
     let(:location_params) { attributes_for(:location) }
     let(:location_hash) do
       { payload: { ip: location_params[:ip],
@@ -57,8 +57,18 @@ RSpec.describe LocationsController do
 
       it 'returns error messages' do
         post(:create, params: { location: { ip: '' } })
-        expect(JSON.parse(response.body)['error']).to be_truthy
+        expect(response.parsed_body['error']).to be_truthy
       end
+    end
+  end
+
+  describe 'GET Locations/:id' do
+    let!(:location) { create(:location) }
+
+    it "returns location and status :ok" do
+      get :show, params: { id: location.id }
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body['location']['id']).to eq(location.id)
     end
   end
 end
