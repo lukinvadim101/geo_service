@@ -4,8 +4,7 @@ require 'rails_helper'
 RSpec.describe LocationServiceJob do
   context 'with valid params' do
     before do
-      allow(IpstackService).to receive(:new).and_return(geolocation_service)
-      allow(geolocation_service).to receive(:call).and_return(location_hash)
+      allow(GeoService).to receive(:call).with(location.id).and_return(location_hash)
     end
 
     let(:geolocation_service) { instance_double(IpstackService) }

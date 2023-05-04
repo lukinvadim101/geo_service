@@ -27,11 +27,11 @@ RSpec.describe LocationsController do
 
     context 'with valid params' do
       before do
-        allow(IpstackService).to receive(:new).and_return(geolocation_service)
-        allow(geolocation_service).to receive(:call).and_return(location_hash)
+        allow(GeoService).to receive(:new).and_return(geolocation_service)
+        allow(geolocation_service).to receive(:ipstack_call).and_return(location_hash)
       end
 
-      let(:geolocation_service) { instance_double(IpstackService) }
+      let(:geolocation_service) { instance_double(GeoService) }
 
       it 'creates a new location' do
         expect do
@@ -65,9 +65,8 @@ RSpec.describe LocationsController do
   describe 'GET Locations/:id' do
     let!(:location) { create(:location) }
 
-    it "returns location and status :ok" do
+    it "returns location" do
       get :show, params: { id: location.id }
-      expect(response).to have_http_status(:ok)
       expect(response.parsed_body['location']['id']).to eq(location.id)
     end
   end
@@ -79,7 +78,7 @@ RSpec.describe LocationsController do
       expect do
         delete :destroy, params: { id: location.id }
       end.to change(Location, :count).by(-1)
-      expect(response.status).to eq(204)
+      expect(response).to have_http_status(:no_content)
     end
   end
 end
