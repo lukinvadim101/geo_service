@@ -1,8 +1,13 @@
 FactoryBot.define do
-  factory :location do
+  factory :location, class: :Location do
     ip { "11.11.11.11" }
-    name { "Location Name" }
-    latitude { 1.5 }
-    longitude { 1.5 }
+  end
+
+  factory :location_hash, class: :Location do
+    { payload: {
+      name: 'Mountain View, 94043',
+      latitude: 37.4192,
+      longitude: -122.0574
+    } }
   end
 end
