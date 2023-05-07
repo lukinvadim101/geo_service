@@ -9,13 +9,19 @@ RSpec.describe LocationServiceJob do
 
     describe '#perform' do
       before do
-        allow(GeoService).to receive(:call).with(location.ip).and_return(service_response)
+        allow(GeoService).to receive(:new).and_return(geo_service)
+        allow(geo_service).to receive(:call).with(location.id).and_return(service_response)
+
         described_class.perform_now(location.id)
         location.reload
       end
 
       it 'call GeolocationService' do
         expect(geo_service).to have_received(:call).with(location.ip)
+      end
+
+      it 'call IpstackService with default params' do
+        expect(ipstack_service).to have_received(:ipstack_call).with(location.ip)
       end
 
       it 'updates location with response data' do
