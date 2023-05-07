@@ -2,26 +2,21 @@ require 'rails_helper'
 
 RSpec.describe LocationServiceJob do
   context 'with valid params' do
-    let(:ipstack_service) { instance_double(IpstackService) }
-    let(:geo_service) { instance_double(GeoService) }
-    let!(:location) { create(:location, ip: "11.22.22.22") }
-    let(:service_response) { attributes_for(:location_hash) }
+    let(:base_geo_service) { instance_double(BaseGeoService) }
+    let!(:location) { create(:location) }
+    let(:service_response) { { payload: attributes_for(:location_hash) } }
 
-    describe '#perform' do
+    describe '#perform with default service parameter' do
       before do
-        allow(GeoService).to receive(:new).and_return(geo_service)
-        allow(geo_service).to receive(:call).with(location.id).and_return(service_response)
+        allow(BaseGeoService).to receive(:new).and_return(base_geo_service)
+        allow(base_geo_service).to receive(:call).with(location.ip).and_return(service_response)
 
         described_class.perform_now(location.id)
         location.reload
       end
 
-      it 'call GeolocationService' do
-        expect(geo_service).to have_received(:call).with(location.ip)
-      end
-
-      it 'call IpstackService with default params' do
-        expect(ipstack_service).to have_received(:ipstack_call).with(location.ip)
+      it 'calls BaseGeoService' do
+        expect(base_geo_service).to have_received(:call).with(location.ip)
       end
 
       it 'updates location with response data' do

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :location, class: :Location do
-    ip { "11.11.11.11" }
+    ip { Faker::Internet.unique.ip_v6_address }
   end
 
   factory :location_hash, class: :Location do
