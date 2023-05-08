@@ -1,6 +1,8 @@
+require 'rails_helper'
+
 RSpec.describe LocationServiceChain do
-  describe 'returns child service from GeoService call' do
-    let(:ip) { attributes_for(:location)[:ip] }
+  describe 'calls IpstackService and gets location data' do
+    let(:ip_address) { '1.2.3.4' }
     let(:ipstack_service) { instance_double(IpstackService) }
     let(:location_service_chain) { instance_double(described_class) }
     let(:service_response) do
@@ -15,18 +17,19 @@ RSpec.describe LocationServiceChain do
 
     before do
       allow(IpstackService).to receive(:new).and_return(ipstack_service)
-      allow(ipstack_service).to receive(:call).with(:ip).and_return(service_response)
+      allow(ipstack_service).to receive(:call).with(ip_address).and_return(service_response)
 
-      allow(LocationServiceChain).to receive(:new).and_return(location_service_chain)
-      allow(location_service_chain).to receive(:call).with(location.ip).and_return(service_response)
-
-      described_class.new([ipstack_service]).call('1.1.2.2')
+      allow(location_service_chain).to receive(:call).with(ip_address).and_return(service_response)
     end
 
-    context 'when default service executed' do
-      it 'ipstack gets call' do
-        expect(ipstack_service).to have_received(:call).with('1.1.2.2')
-      end
+    it 'calls IpstackService with the correct IP and returns location data' do
+      services = [ipstack_service]
+      location_service_chain = described_class.new(services)
+
+      result = location_service_chain.call(ip_address)
+
+      expect(result).to eq(service_response)
+      expect(ipstack_service).to have_received(:call).with(ip_address)
     end
   end
 end
