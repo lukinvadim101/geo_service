@@ -17,7 +17,7 @@ RSpec.describe LocationsController do
 
   describe 'POST Locations' do
     context 'with valid params' do
-      let(:location_params) { { ip: "11.11.11.11" } }
+      let(:location_params) { attributes_for(:location) }
       let(:location) { instance_double(Location, id: 101) }
 
       before do

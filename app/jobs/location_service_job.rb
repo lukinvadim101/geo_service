@@ -3,7 +3,9 @@ class LocationServiceJob < ApplicationJob
 
   def perform(location_id)
     location = Location.find(location_id)
-    location_service_response = BaseGeoService.new.call(location.ip)
-    location.update(location_service_response[:payload])
+    services = [IpstackService.new]
+    response = LocationServiceChain.new(services).call(location.ip)
+
+    location.update(response[:payload])
   end
 end
