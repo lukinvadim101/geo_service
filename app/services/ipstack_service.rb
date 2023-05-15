@@ -13,6 +13,7 @@ class IpstackService < BaseLocationService
 
     { payload: LocationDecorator.new(response.body).handle_response }
   rescue Faraday::Error => e
+    logger.error { "#{e}: #{e.message}" }
     { error: "Error fetching data: #{e.message}" }
   end
 end
