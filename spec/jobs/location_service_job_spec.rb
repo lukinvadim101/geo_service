@@ -14,23 +14,27 @@ RSpec.describe LocationServiceJob do
     end
     let(:location_service_chain) { instance_double(LocationServiceChain) }
 
-    describe 'calls location_service_chain' do
-      before do
-        allow(Location).to receive(:find).and_return(location)
-        allow(LocationServiceChain).to receive(:new).and_return(location_service_chain)
-        allow(location_service_chain).to receive(:call).with(location.ip).and_return(service_response)
+    before do
+      allow(Location).to receive(:find).and_return(location)
+      allow(LocationServiceChain).to receive(:new).and_return(location_service_chain)
+      allow(location_service_chain).to receive(:call).with(location.ip).and_return(service_response)
 
-        described_class.perform_now(location.id)
-        location.reload
-      end
+      described_class.perform_now(location.id)
+      location.reload
+    end
 
-      it 'calls LocationServiceChain with the correct IP' do
-        expect(location_service_chain).to have_received(:call).with(location.ip)
-      end
+    it 'calls LocationServiceChain with the correct IP' do
+      expect(location_service_chain).to have_received(:call).with(location.ip)
+    end
 
-      it 'updates location with response data' do
-        expect(location.name).to eq(service_response[:payload][:name])
-      end
+    it 'updates location with response data' do
+      expect(location.name).to eq(service_response[:payload][:name])
+    end
+  end
+
+  context 'with invalid params' do
+    it 'raises an error with invalid location id' do
+      expect { described_class.perform_now(-1) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end
