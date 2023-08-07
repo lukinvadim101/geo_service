@@ -18,7 +18,7 @@ gem 'pg', '~> 1.1'
 gem 'puma', '~> 5.0'
 gem 'rails', '~> 7.0.4'
 gem 'sprockets-rails'
-gem 'stimulus-rails'
+gem 'stimulus-rails', '>= 1.2.2'
 
 group :development, :test do
   gem 'factory_bot_rails'
