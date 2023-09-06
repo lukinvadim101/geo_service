@@ -38,7 +38,7 @@ end
 group :development do
   gem 'listen'
   gem 'spring-watcher-listen'
-  gem 'web-console'
+  gem 'web-console', '>= 4.2.1'
 end
 
 group :test do
