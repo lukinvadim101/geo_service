@@ -21,7 +21,7 @@ gem 'sprockets-rails'
 gem 'stimulus-rails'
 
 group :development, :test do
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '>= 6.3.0'
   gem 'faker'
   gem 'pry'
   gem 'rails-controller-testing'
