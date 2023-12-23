@@ -30,7 +30,7 @@ group :development, :test do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec', require: false
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '>= 6.0.0'
   gem 'spring'
   gem 'spring-commands-rspec'
 end
