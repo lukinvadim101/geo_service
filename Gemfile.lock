@@ -118,7 +118,7 @@ GEM
       activesupport (>= 5.1)
       haml (>= 4.0.6)
       railties (>= 5.1)
-    i18n (1.12.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
@@ -153,7 +153,7 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    minitest (5.18.0)
+    minitest (5.20.0)
     msgpack (1.6.1)
     net-imap (0.3.4)
       date
@@ -166,6 +166,8 @@ GEM
       net-protocol
     nio4r (2.5.8)
     nokogiri (1.14.2-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.14.2-x86_64-linux)
       racc (~> 1.4)
     parallel (1.22.1)
     parser (3.2.0.0)
@@ -262,7 +264,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    shoulda-matchers (5.3.0)
+    shoulda-matchers (6.0.0)
       activesupport (>= 5.2.0)
     spring (4.1.0)
     spring-commands-rspec (1.0.4)
@@ -303,6 +305,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   active_model_serializers
@@ -331,7 +334,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rspec
   selenium-webdriver
-  shoulda-matchers
+  shoulda-matchers (>= 6.0.0)
   spring
   spring-commands-rspec
   spring-watcher-listen
@@ -344,4 +347,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.16
+   2.3.26
