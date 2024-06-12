@@ -16,7 +16,7 @@ gem 'jsbundling-rails'
 gem 'kaminari'
 gem 'pg', '~> 1.1'
 gem 'puma', '~> 5.0'
-gem 'rails', '~> 7.0.4'
+gem 'rails', '~> 7.0.8', '>= 7.0.8.3'
 gem 'sprockets-rails'
 gem 'stimulus-rails'
 
