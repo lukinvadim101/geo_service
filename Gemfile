@@ -26,10 +26,10 @@ group :development, :test do
   gem 'pry'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
-  gem 'rubocop', require: false
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
-  gem 'rubocop-rspec', require: false
+  gem 'rubocop', '>= 1.43.0', require: false
+  gem 'rubocop-performance', '>= 1.16.0'
+  gem 'rubocop-rails', '>= 2.18.0'
+  gem 'rubocop-rspec', '>= 2.17.0', require: false
   gem 'shoulda-matchers'
   gem 'spring'
   gem 'spring-commands-rspec'
@@ -43,8 +43,8 @@ end
 
 group :test do
   gem 'database_cleaner-active_record'
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
+  gem 'selenium-webdriver', '>= 4.8.0'
+  gem 'webdrivers', '>= 5.3.0'
 end
 
 
