@@ -164,8 +164,10 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    nio4r (2.5.8)
+    nio4r (2.7.3)
     nokogiri (1.14.2-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.14.2-x86_64-linux)
       racc (~> 1.4)
     parallel (1.22.1)
     parser (3.2.0.0)
@@ -174,7 +176,7 @@ GEM
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    puma (5.6.5)
+    puma (5.6.9)
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (2.2.6.3)
@@ -303,6 +305,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   active_model_serializers
@@ -322,7 +325,7 @@ DEPENDENCIES
   listen
   pg (~> 1.1)
   pry
-  puma (~> 5.0)
+  puma (~> 5.6, >= 5.6.9)
   rails (~> 7.0.4)
   rails-controller-testing
   rspec-rails
@@ -344,4 +347,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.16
+   2.3.26
